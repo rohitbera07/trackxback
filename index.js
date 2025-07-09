@@ -5,10 +5,7 @@ const mongoose = require('mongoose')
 
 const app=express();
 app.use(express.json());
-app.use(cors({
-  origin: 'https://trackfrontx.vercel.app', // 👈 Replace this with your actual Vercel domain
-  credentials: true, // Optional: if you use cookies or auth headers
-}));
+app.use(cors());
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
