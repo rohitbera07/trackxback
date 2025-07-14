@@ -141,5 +141,36 @@ router.delete('/projects/:id/tasks/:index', authMiddleware, async (req, res) => 
     res.status(500).json({ error: 'Server error' });
   }
 });
+// DELETE /user/projects/:id
+router.delete('/projects/:id', authMiddleware, async (req, res) => {
+  const { id } = req.params;
+  const userId = req.user._id;
+
+  const project = await Project.findById(id);
+  if (!project) return res.status(404).json({ error: 'Project not found' });
+
+  if (!project.adminId.equals(userId))
+    return res.status(403).json({ error: 'Only admin can delete the project' });
+
+  await project.deleteOne();
+  res.json({ message: 'Project deleted successfully' });
+});
+
+// PUT /user/projects/:id
+router.put('/projects/:id', authMiddleware, async (req, res) => {
+  const { id } = req.params;
+  const { projectName } = req.body;
+  const userId = req.user._id;
+
+  const project = await Project.findById(id);
+  if (!project) return res.status(404).json({ error: 'Project not found' });
+
+  if (!project.adminId.equals(userId))
+    return res.status(403).json({ error: 'Only admin can update the project' });
+
+  project.projectName = projectName || project.projectName;
+  await project.save();
+  res.json({ message: 'Project updated', project });
+});
 
 module.exports=router;
