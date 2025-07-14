@@ -5,7 +5,7 @@ const mongoose = require('mongoose')
 
 const app=express();
 app.use(express.json());
-const allowedOrigins = ['http://localhost:5173'];
+const allowedOrigins = ['https://trackfrontx.vercel.app'];
 
 app.use(cors({
   origin: allowedOrigins,
